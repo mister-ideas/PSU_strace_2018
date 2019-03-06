@@ -7,7 +7,7 @@
 
 CC=				gcc
 
-SRC=			test.c
+SRC=			strace.c
 
 OBJ=			$(SRC:.c=.o)
 
