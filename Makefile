@@ -8,7 +8,8 @@
 CC=				gcc
 
 SRC=			src/strace.c		\
-			src/print.c
+			src/print.c		\
+			src/print_params.c	\
 
 OBJ=			$(SRC:.c=.o)
 

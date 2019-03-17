@@ -51,7 +51,7 @@ int do_tracer(pid_t child)
             if (ptrace(PTRACE_GETREGS, child, NULL, &u_in))
                 perror("ptrace");
             if (u_in.orig_rax < 334 && u_in.orig_rax > 0)
-                syscall_display(child, u_in.orig_rax, u_in.rax);
+                syscall_display(child, u_in.orig_rax, u_in.rax, u_in);
         }
     }
     return (0);
