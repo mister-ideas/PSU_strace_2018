@@ -7,13 +7,16 @@
 
 CC=				gcc
 
-SRC=			strace.c
+SRC=			src/strace.c		\
+			src/print.c
 
 OBJ=			$(SRC:.c=.o)
 
 NAME=			strace
 
-CFLAGS=			-Wall -Wextra -Werror
+CFLAGS=			-Wall -Wextra
+
+CPPFLAGS	+=	-I./include
 
 RM=				rm -f
 
