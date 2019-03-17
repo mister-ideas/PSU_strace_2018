@@ -54,6 +54,7 @@ int do_tracer(pid_t child)
                 syscall_display(child, u_in.orig_rax, u_in.rax, u_in);
         }
     }
+    printf("+++ exited with 0 +++\n");
     return (0);
 }
 
