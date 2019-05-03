@@ -70,10 +70,9 @@ void syscall_display(pid_t child, unsigned sysnum, unsigned retval,
     printf(") = ");
     if (retval) {
         if (!hexadecimal && strcmp(syscall_table[(int)sysnum].name, "write") == 0)
-            printf("%d", (unsigned int)retval);
+            printf("%d\n", (unsigned int)retval);
         else
-            printf("0x%x", (unsigned int)retval);
+            printf("0x%x\n", (unsigned int)retval);
     } else
-        printf("?");
-    printf("\n");
+        printf("?\n");
 }
