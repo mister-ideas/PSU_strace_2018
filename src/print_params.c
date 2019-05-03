@@ -22,15 +22,15 @@
 #include <string.h>
 #include "print.h"
 
-void print_params5(char *name, int nb, pid_t child, struct user_regs_struct u_in, int hexadecimal)
+void print_params5(int nb, struct user_regs_struct u_in)
 {
     printf(", Ox%x", (unsigned int)u_in.r8);
     nb--;
     if (nb > 0)
-        print_params6(name, nb, child, u_in, hexadecimal);
+        print_params6(nb, u_in);
 }
 
-void print_params6(char *name, int nb, pid_t child, struct user_regs_struct u_in, int hexadecimal)
+void print_params6(int nb, struct user_regs_struct u_in)
 {
     printf(", Ox%x", (unsigned int)u_in.r9);
     nb--;
