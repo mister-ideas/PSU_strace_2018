@@ -22,16 +22,16 @@
 #include <string.h>
 #include "print.h"
 
-void print_params5(int nb, pid_t child, struct user_regs_struct u_in)
+void print_params5(char *name, int nb, pid_t child, struct user_regs_struct u_in, int hexadecimal)
 {
-    printf(", %x", (unsigned)ptrace(PTRACE_PEEKTEXT, child, u_in.r8, NULL));
+    printf(", Ox%x", (unsigned int)u_in.r8);
     nb--;
     if (nb > 0)
-        print_params6(nb, child, u_in);
+        print_params6(name, nb, child, u_in, hexadecimal);
 }
 
-void print_params6(int nb, pid_t child, struct user_regs_struct u_in)
+void print_params6(char *name, int nb, pid_t child, struct user_regs_struct u_in, int hexadecimal)
 {
-    printf(", %x", (unsigned)ptrace(PTRACE_PEEKTEXT, child, u_in.r9, NULL));
+    printf(", Ox%x", (unsigned int)u_in.r9);
     nb--;
 }

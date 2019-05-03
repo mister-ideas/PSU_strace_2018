@@ -33,7 +33,7 @@ int do_child(int ac, char **av, char **envp)
     return execve(ag[0], ag, envp);
 }
 
-int do_tracer(pid_t child)
+int do_tracer(pid_t child, int hexadecimal)
 {
     int status = 0;
     struct user_regs_struct u_in;
@@ -51,7 +51,7 @@ int do_tracer(pid_t child)
             if (ptrace(PTRACE_GETREGS, child, NULL, &u_in))
                 perror("ptrace");
             if (u_in.orig_rax < 334 && u_in.orig_rax > 0)
-                syscall_display(child, u_in.orig_rax, u_in.rax, u_in);
+                syscall_display(child, u_in.orig_rax, u_in.rax, u_in, hexadecimal);
         }
     }
     printf("+++ exited with 0 +++\n");
@@ -61,17 +61,23 @@ int do_tracer(pid_t child)
 int main(int ac, char **av, char **envp)
 {
     pid_t child;
+    int hexadecimal = 1;
+    char **program = av + 1;
 
     if (ac == 1 || ac > 4) {
         dprintf(2, "USAGE: ./strace [-s] [-p <pid>|<command>]\n");
         return (84);
     } else if (strcmp(av[1], "--help") == 0)
         printf("USAGE: ./strace [-s] [-p <pid>|<command>]\n");
+    else if (strcmp(av[1], "-s") == 0) {
+        hexadecimal = 0;
+        program = av + 2;
+    }
     child = fork();
     if (child == 0) {
-        if (do_child(ac - 1, av + 1, envp) == -1)
+        if (do_child(ac - 1, program, envp) == -1)
             return (84);
         return (0);
     }
-    return (do_tracer(child));
+    return (do_tracer(child, hexadecimal));
 }
