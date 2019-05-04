@@ -58,19 +58,24 @@ int do_tracer(pid_t child, int hexadecimal)
     return (0);
 }
 
+void check_usage(int ac, char **av) {
+    if (ac == 1 || ac > 4) {
+        dprintf(2, "USAGE: ./strace [-s] [-p <pid>|<command>]\n");
+        exit(84);
+    } else if (strcmp(av[1], "--help") == 0) {
+        printf("USAGE: ./strace [-s] [-p <pid>|<command>]\n");
+        exit(0);
+    }
+}
+
 int main(int ac, char **av, char **envp)
 {
     pid_t child;
     int hexadecimal = 1;
     char **program = av + 1;
 
-    if (ac == 1 || ac > 4) {
-        dprintf(2, "USAGE: ./strace [-s] [-p <pid>|<command>]\n");
-        return (84);
-    }
-    if (strcmp(av[1], "--help") == 0)
-        printf("USAGE: ./strace [-s] [-p <pid>|<command>]\n");
-    else if (strcmp(av[1], "-s") == 0) {
+    check_usage(ac, av);
+    if (strcmp(av[1], "-s") == 0) {
         hexadecimal = 0;
         program = av + 2;
     }
