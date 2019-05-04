@@ -33,6 +33,18 @@ int do_child(int ac, char **av, char **envp)
     return execve(ag[0], ag, envp);
 }
 
+void check_syscall(pid_t child, struct user_regs_struct u_in, int status,
+                int hexadecimal)
+{
+    if ((WSTOPSIG(status) == SIGTRAP
+    || WSTOPSIG(status) == SIGSTOP) && WIFSTOPPED(status)) {
+        if (ptrace(PTRACE_GETREGS, child, NULL, &u_in))
+            perror("ptrace");
+        if (u_in.orig_rax < 334 && u_in.orig_rax > 0)
+            syscall_display(u_in.orig_rax, u_in.rax, u_in, hexadecimal);
+    }
+}
+
 int do_tracer(pid_t child, int hexadecimal)
 {
     int status = 0;
@@ -46,13 +58,7 @@ int do_tracer(pid_t child, int hexadecimal)
         if (ptrace(PTRACE_SINGLESTEP, child, 0, 0) == -1)
             perror("ptrace singlestep");
         waitpid(child, &status, 0);
-        if ((WSTOPSIG(status) == SIGTRAP
-        || WSTOPSIG(status) == SIGSTOP) && WIFSTOPPED(status)) {
-            if (ptrace(PTRACE_GETREGS, child, NULL, &u_in))
-                perror("ptrace");
-            if (u_in.orig_rax < 334 && u_in.orig_rax > 0)
-                syscall_display(u_in.orig_rax, u_in.rax, u_in, hexadecimal);
-        }
+        check_syscall(child, u_in, status, hexadecimal);
     }
     printf("+++ exited with 0 +++\n");
     return (0);
