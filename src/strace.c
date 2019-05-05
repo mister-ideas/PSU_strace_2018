@@ -68,7 +68,8 @@ void check_usage(int ac, char **av) {
     if (ac == 1 || ac > 4) {
         dprintf(2, "USAGE: ./strace [-s] [-p <pid>|<command>]\n");
         exit(84);
-    } else if (strcmp(av[1], "--help") == 0) {
+    }
+    else if (strcmp(av[1], "--help") == 0) {
         printf("USAGE: ./strace [-s] [-p <pid>|<command>]\n");
         exit(0);
     }
